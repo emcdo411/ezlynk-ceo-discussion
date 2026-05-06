@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EZ LYNK · AI Intelligence Gap Analysis</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0a0a0b;
+    --surface: #111214;
+    --card: #17191d;
+    --border: #2a2d34;
+    --accent: #e8ff47;
+    --accent2: #ff6b35;
+    --accent3: #4dffd2;
+    --text: #e8eaf0;
+    --muted: #7a7f8e;
+    --red: #ff4444;
+    --yellow: #ffcc00;
+    --green: #00e676;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--black);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* GRID NOISE BACKGROUND */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(232,255,71,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(232,255,71,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* HEADER */
+  header {
+    padding: 48px 0 40px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 48px;
+  }
+
+  .eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .eyebrow::before {
+    content: '';
+    width: 24px;
+    height: 1px;
+    background: var(--accent);
+  }
+
+  h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(48px, 8vw, 88px);
+    line-height: 0.92;
+    letter-spacing: 0.02em;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+
+  h1 span {
+    color: var(--accent);
+  }
+
+  .subtitle {
+    font-size: 15px;
+    color: var(--muted);
+    font-weight: 300;
+    margin-top: 20px;
+    max-width: 520px;
+    line-height: 1.6;
+  }
+
+  .meta-row {
+    display: flex;
+    gap: 24px;
+    margin-top: 28px;
+    flex-wrap: wrap;
+  }
+
+  .meta-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 6px 12px;
+    border-radius: 2px;
+  }
+
+  .meta-tag.active {
+    color: var(--accent);
+    border-color: rgba(232,255,71,0.3);
+    background: rgba(232,255,71,0.05);
+  }
+
+  /* SECTION HEADERS */
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* VERDICT BANNER */
+  .verdict-banner {
+    background: linear-gradient(135deg, rgba(232,255,71,0.08), rgba(232,255,71,0.03));
+    border: 1px solid rgba(232,255,71,0.25);
+    border-left: 3px solid var(--accent);
+    padding: 28px 32px;
+    border-radius: 4px;
+    margin-bottom: 48px;
+  }
+
+  .verdict-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+
+  .verdict-text {
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 1.5;
+    color: var(--text);
+  }
+
+  .verdict-text strong {
+    color: var(--accent);
+  }
+
+  /* GAP CARDS */
+  .gaps-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-bottom: 48px;
+  }
+
+  .gap-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 28px;
+    display: grid;
+    grid-template-columns: 60px 1fr auto;
+    gap: 20px;
+    align-items: start;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .gap-card::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: var(--gap-color, var(--border));
+    transition: width 0.2s ease;
+  }
+
+  .gap-card:hover {
+    border-color: var(--gap-color, var(--border));
+    transform: translateX(4px);
+  }
+
+  .gap-card:hover::before {
+    width: 4px;
+  }
+
+  .gap-number {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 40px;
+    color: var(--border);
+    line-height: 1;
+    transition: color 0.2s ease;
+  }
+
+  .gap-card:hover .gap-number {
+    color: var(--gap-color, var(--muted));
+  }
+
+  .gap-body h3 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--text);
+  }
+
+  .gap-body p {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.6;
+    margin-bottom: 12px;
+  }
+
+  .gap-body .opportunity {
+    font-size: 12px;
+    color: var(--gap-color, var(--muted));
+    font-weight: 500;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .gap-severity {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+    min-width: 80px;
+  }
+
+  .severity-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 4px 8px;
+    border-radius: 2px;
+    white-space: nowrap;
+  }
+
+  .sev-critical { background: rgba(255,68,68,0.15); color: var(--red); }
+  .sev-high { background: rgba(255,107,53,0.15); color: var(--accent2); }
+  .sev-medium { background: rgba(255,204,0,0.15); color: var(--yellow); }
+
+  .hcdg-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  /* LAYER MAPPING */
+  .layer-map {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 32px;
+    margin-bottom: 48px;
+  }
+
+  .layer-map h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 0.05em;
+    margin-bottom: 24px;
+    color: var(--text);
+  }
+
+  .layer-row {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 16px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--border);
+    align-items: center;
+  }
+
+  .layer-row:last-child { border-bottom: none; }
+
+  .layer-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 6px 10px;
+    border-radius: 2px;
+    text-align: center;
+    border: 1px solid;
+  }
+
+  .layer-tag.status-gap { color: var(--red); border-color: rgba(255,68,68,0.3); background: rgba(255,68,68,0.08); }
+  .layer-tag.status-partial { color: var(--yellow); border-color: rgba(255,204,0,0.3); background: rgba(255,204,0,0.08); }
+  .layer-tag.status-present { color: var(--green); border-color: rgba(0,230,118,0.3); background: rgba(0,230,118,0.08); }
+
+  .layer-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  .layer-desc strong {
+    color: var(--text);
+    display: block;
+    margin-bottom: 2px;
+    font-size: 14px;
+  }
+
+  /* DECISION GATE */
+  .hcdg-section {
+    margin-bottom: 48px;
+  }
+
+  .hcdg-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+  }
+
+  .hcdg-test {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 20px 16px;
+    text-align: center;
+    position: relative;
+  }
+
+  .hcdg-icon {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+
+  .hcdg-name {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+
+  .hcdg-result {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 2px;
+    display: inline-block;
+  }
+
+  .result-pass { background: rgba(0,230,118,0.15); color: var(--green); }
+  .result-conditional { background: rgba(255,204,0,0.15); color: var(--yellow); }
+  .result-fail { background: rgba(255,68,68,0.15); color: var(--red); }
+
+  .hcdg-note {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 8px;
+    line-height: 1.4;
+  }
+
+  /* VERDICT FINAL */
+  .final-verdict {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 40px;
+    margin-bottom: 48px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .final-verdict::after {
+    content: 'PASS';
+    position: absolute;
+    right: 30px;
+    bottom: -10px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 120px;
+    color: rgba(0,230,118,0.04);
+    letter-spacing: 0.05em;
+    pointer-events: none;
+  }
+
+  .final-verdict h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    letter-spacing: 0.05em;
+    margin-bottom: 16px;
+  }
+
+  .final-verdict p {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.7;
+    max-width: 620px;
+    margin-bottom: 24px;
+  }
+
+  .cta-row {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .cta-primary {
+    background: var(--accent);
+    color: var(--black);
+    border: none;
+    padding: 12px 28px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    border-radius: 2px;
+    text-transform: uppercase;
+    transition: all 0.15s ease;
+  }
+
+  .cta-primary:hover {
+    background: #f5ff70;
+    transform: translateY(-1px);
+  }
+
+  .cta-secondary {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+    padding: 12px 28px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    border-radius: 2px;
+    text-transform: uppercase;
+    transition: all 0.15s ease;
+  }
+
+  .cta-secondary:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border);
+    padding-top: 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: gap;
+    gap: 12px;
+  }
+
+  .footer-brand {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+  }
+
+  .footer-brand span {
+    color: var(--accent);
+  }
+
+  .dacr {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    opacity: 0.5;
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .animate { animation: fadeUp 0.5s ease forwards; opacity: 0; }
+  .delay-1 { animation-delay: 0.1s; }
+  .delay-2 { animation-delay: 0.2s; }
+  .delay-3 { animation-delay: 0.3s; }
+  .delay-4 { animation-delay: 0.4s; }
+  .delay-5 { animation-delay: 0.5s; }
+  .delay-6 { animation-delay: 0.6s; }
+
+  @media (max-width: 600px) {
+    .gap-card { grid-template-columns: 40px 1fr; }
+    .gap-severity { display: none; }
+    .layer-row { grid-template-columns: 90px 1fr; }
+    h1 { font-size: 52px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- HEADER -->
+  <header class="animate">
+    <div class="eyebrow">AI Adoption Architect v6.6 · Gap Analysis Brief</div>
+    <h1>EZ LYNK<br><span>INTELLIGENCE</span><br>GAP REPORT</h1>
+    <p class="subtitle">A diagnostic of where EZ LYNK's existing data layer ends and where an AI decision intelligence layer begins. Built from your live architecture, not a template.</p>
+    <div class="meta-row">
+      <span class="meta-tag active">Target: EZ LYNK</span>
+      <span class="meta-tag">Fleet Telematics</span>
+      <span class="meta-tag">Predictive Maintenance</span>
+      <span class="meta-tag active">HCDG: PASS</span>
+      <span class="meta-tag">Epoch Frameworks LLC</span>
+    </div>
+  </header>
+
+  <!-- VERDICT BANNER -->
+  <div class="verdict-banner animate delay-1">
+    <div class="verdict-label">Architectural Verdict</div>
+    <div class="verdict-text">
+      EZ LYNK has a <strong>world-class data collection layer</strong> and a reporting gap that is costing fleet operators money every week. The same data that produces compliance logs and dashboards today can produce <strong>forward-looking decision briefs</strong> with an AI layer on top. The infrastructure is already built. The intelligence isn't.
+    </div>
+  </div>
+
+  <!-- GAP ANALYSIS -->
+  <div class="animate delay-2">
+    <div class="section-label">5 Identified Intelligence Gaps</div>
+  </div>
+
+  <div class="gaps-grid animate delay-3">
+
+    <div class="gap-card" style="--gap-color: var(--red);">
+      <div class="gap-number">01</div>
+      <div class="gap-body">
+        <h3>Retrospective-Only Reporting</h3>
+        <p>EZ LYNK's current output tells fleet managers what happened: fault codes logged, maintenance events recorded, compliance status confirmed. There is no system producing what should happen next based on signal patterns already in the data.</p>
+        <div class="opportunity">→ AI Layer: Predictive action brief delivered weekly per fleet</div>
+      </div>
+      <div class="gap-severity">
+        <span class="severity-label sev-critical">Critical</span>
+        <span class="hcdg-badge">Layer 0E</span>
+      </div>
+    </div>
+
+    <div class="gap-card" style="--gap-color: var(--accent2);">
+      <div class="gap-number">02</div>
+      <div class="gap-body">
+        <h3>No Vehicle Failure Probability Scoring</h3>
+        <p>Fault code history, mileage cycles, and sensor telemetry exist in EZ LYNK's stack. That data is not currently producing a ranked probability of which vehicles are most likely to fail in the next 30, 60, or 90 days. Fleet operators are reacting instead of pre-positioning maintenance dollars.</p>
+        <div class="opportunity">→ AI Layer: Failure probability index per vehicle, updated weekly</div>
+      </div>
+      <div class="gap-severity">
+        <span class="severity-label sev-critical">Critical</span>
+        <span class="hcdg-badge">Layer 0B</span>
+      </div>
+    </div>
+
+    <div class="gap-card" style="--gap-color: var(--accent2);">
+      <div class="gap-number">03</div>
+      <div class="gap-body">
+        <h3>Driver Risk Is Not Quantified</h3>
+        <p>Driver behavior data sits inside EZ LYNK's telemetry layer but is only surfaced reactively. There is no driver risk index that automatically elevates attention toward elevated-risk operators before an incident, claim, or insurance event occurs.</p>
+        <div class="opportunity">→ AI Layer: Driver risk index with fleet manager alert threshold</div>
+      </div>
+      <div class="gap-severity">
+        <span class="severity-label sev-high">High</span>
+        <span class="hcdg-badge">Layer 1</span>
+      </div>
+    </div>
+
+    <div class="gap-card" style="--gap-color: var(--yellow);">
+      <div class="gap-number">04</div>
+      <div class="gap-body">
+        <h3>Maintenance ROI Is Invisible</h3>
+        <p>Operators know what they spent on maintenance. They do not know which maintenance decisions actually reduced downtime, which were unnecessary given the vehicle's condition, or where the next dollar will move the needle most. That intelligence gap is a direct revenue and retention risk for EZ LYNK.</p>
+        <div class="opportunity">→ AI Layer: Maintenance ROI scoring and spend allocation recommendation</div>
+      </div>
+      <div class="gap-severity">
+        <span class="severity-label sev-high">High</span>
+        <span class="hcdg-badge">Layer 2</span>
+      </div>
+    </div>
+
+    <div class="gap-card" style="--gap-color: var(--yellow);">
+      <div class="gap-number">05</div>
+      <div class="gap-body">
+        <h3>No Governance Layer for AI Decision Drift</h3>
+        <p>As EZ LYNK scales toward an AI intelligence layer, there is no framework in place to detect when AI-generated recommendations drift from current fleet conditions, or to define who owns the call when the model's output conflicts with the operator's judgment. Without this, AI adoption stalls at the demo stage.</p>
+        <div class="opportunity">→ AI Layer: Chameleon Governance Model embedded at decision output layer</div>
+      </div>
+      <div class="gap-severity">
+        <span class="severity-label sev-medium">Medium</span>
+        <span class="hcdg-badge">Layer 0C</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- LAYER MAPPING -->
+  <div class="animate delay-4">
+    <div class="section-label">Framework Layer Mapping</div>
+    <div class="layer-map">
+      <h2>Where Each Gap Lives</h2>
+
+      <div class="layer-row">
+        <div class="layer-tag status-present">Present</div>
+        <div class="layer-desc">
+          <strong>Layer 0 · BI Architecture</strong>
+          EZ LYNK has strong data collection infrastructure. Compliance output, dashboard delivery, and telemetry logging are functional. Stack coherence is high.
+        </div>
+      </div>
+
+      <div class="layer-row">
+        <div class="layer-tag status-gap">Gap</div>
+        <div class="layer-desc">
+          <strong>Layer 0B · MLOps Operationalization</strong>
+          No production AI pipeline exists. Fault and telemetry data is not feeding a live predictive model. No CI/CD feedback loop for model retraining as fleet conditions change.
+        </div>
+      </div>
+
+      <div class="layer-row">
+        <div class="layer-tag status-gap">Gap</div>
+        <div class="layer-desc">
+          <strong>Layer 0C · Chameleon Governance Model</strong>
+          No criteria drift detection. No defined owner when AI recommendations conflict with operator judgment. High risk of AI theater at scale.
+        </div>
+      </div>
+
+      <div class="layer-row">
+        <div class="layer-tag status-gap">Gap</div>
+        <div class="layer-desc">
+          <strong>Layer 0E · Human-Centered Decision Gate</strong>
+          AI use case not yet validated against the five HCDG tests. Current state: compliance and dashboards pass. Predictive scoring and driver risk indexing are unbuilt but would pass.
+        </div>
+      </div>
+
+      <div class="layer-row">
+        <div class="layer-tag status-partial">Partial</div>
+        <div class="layer-desc">
+          <strong>Layer 1 · Human-Side Adoption</strong>
+          Fleet manager workflow habits are built around reactive dashboards. Shifting to a forward-looking brief requires behavioral change management. Adoption risk is moderate.
+        </div>
+      </div>
+
+      <div class="layer-row">
+        <div class="layer-tag status-gap">Gap</div>
+        <div class="layer-desc">
+          <strong>Layer 2 · Intelligence Economy Infrastructure</strong>
+          No data moat strategy. EZ LYNK's telematics dataset is a competitive asset that is not currently producing proprietary intelligence at scale. Maintenance ROI scoring and fleet benchmarking could become a defensible product layer.
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- HCDG TESTS -->
+  <div class="hcdg-section animate delay-5">
+    <div class="section-label">Human-Centered Decision Gate Results</div>
+    <div class="hcdg-grid">
+
+      <div class="hcdg-test">
+        <div class="hcdg-icon">🎯</div>
+        <div class="hcdg-name">Decision Impact</div>
+        <span class="hcdg-result result-pass">Pass</span>
+        <div class="hcdg-note">Direct operational and maintenance decisions improved</div>
+      </div>
+
+      <div class="hcdg-test">
+        <div class="hcdg-icon">🔄</div>
+        <div class="hcdg-name">Workflow Alignment</div>
+        <span class="hcdg-result result-pass">Pass</span>
+        <div class="hcdg-note">Fleet managers already use weekly operational cadence</div>
+      </div>
+
+      <div class="hcdg-test">
+        <div class="hcdg-icon">⚡</div>
+        <div class="hcdg-name">Friction Test</div>
+        <span class="hcdg-result result-pass">Pass</span>
+        <div class="hcdg-note">Replaces manual signal-reading with a prioritized brief</div>
+      </div>
+
+      <div class="hcdg-test">
+        <div class="hcdg-icon">🤝</div>
+        <div class="hcdg-name">Trust Test</div>
+        <span class="hcdg-result result-conditional">Conditional</span>
+        <div class="hcdg-note">Requires explainable outputs and operator validation period</div>
+      </div>
+
+      <div class="hcdg-test">
+        <div class="hcdg-icon">🔍</div>
+        <div class="hcdg-name">Removal Test</div>
+        <span class="hcdg-result result-pass">Pass</span>
+        <div class="hcdg-note">Workflow becomes measurably worse without predictive layer</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- FINAL VERDICT -->
+  <div class="final-verdict animate delay-6">
+    <div class="section-label">Recommended Next Step</div>
+    <h2>30 Minutes. One Working Demo.</h2>
+    <p>
+      EZ LYNK does not need a new data strategy. It needs an intelligence layer applied to what already exists. The framework above identifies exactly where the current architecture ends and where decision compression begins. What I want to show you is a working proof of concept built on your own data structure: a weekly fleet intelligence brief that tells an operator what to do next, not what already happened.
+    </p>
+    <p>
+      Nothing theoretical. No slides. Just a working layer on top of what you've already built.
+    </p>
+    <div class="cta-row">
+      <button class="cta-primary" onclick="window.location.href='mailto:?subject=EZ LYNK AI Intelligence Brief - Follow Up'">
+        Schedule 30 Minutes
+      </button>
+      <button class="cta-secondary" onclick="window.open('https://github.com/emcdo411/ai-adoption-architect-assistant', '_blank')">
+        View Framework on GitHub
+      </button>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-brand">
+      <span>Epoch Frameworks LLC</span> · Erwin M. McDonald · Fort Worth, TX<br>
+      AI Adoption Architect v6.6 · Chameleon Governance Model
+    </div>
+    <div class="dacr">Protected under DACR License</div>
+  </footer>
+
+</div>
+</body>
+</html>
