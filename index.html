@@ -358,7 +358,11 @@
   }
 
   .hcdg-icon {
-    font-size: 24px;
+    font-size: 13px;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
     margin-bottom: 10px;
   }
 
@@ -481,7 +485,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    flex-wrap: gap;
+    flex-wrap: wrap;
     gap: 12px;
   }
 
@@ -554,7 +558,7 @@
 
   <!-- GAP ANALYSIS -->
   <div class="animate delay-2">
-    <div class="section-label">5 Identified Intelligence Gaps</div>
+    <div class="section-label">6 Identified Intelligence Gaps</div>
   </div>
 
   <div class="gaps-grid animate delay-3">
@@ -572,7 +576,7 @@
       </div>
     </div>
 
-    <div class="gap-card" style="--gap-color: var(--accent2);">
+    <div class="gap-card" style="--gap-color: var(--red);">
       <div class="gap-number">02</div>
       <div class="gap-body">
         <h3>No Vehicle Failure Probability Scoring</h3>
@@ -588,9 +592,9 @@
     <div class="gap-card" style="--gap-color: var(--accent2);">
       <div class="gap-number">03</div>
       <div class="gap-body">
-        <h3>Driver Risk Is Not Quantified</h3>
-        <p>Driver behavior data sits inside EZ LYNK's telemetry layer but is only surfaced reactively. There is no driver risk index that automatically elevates attention toward elevated-risk operators before an incident, claim, or insurance event occurs.</p>
-        <div class="opportunity">→ AI Layer: Driver risk index with fleet manager alert threshold</div>
+        <h3>Driver Risk Is Not Quantified at the Operator Level</h3>
+        <p>EZ LYNK already surfaces algorithmic scoring that operators trust with real consequences: the Drivewyze safety score is influencing bypass decisions at over 900 weigh stations. That trust infrastructure exists. It is not being extended to a driver risk index that flags elevated-risk operators before an incident, claim, or insurance event occurs. The proof of concept for operator trust in algorithmic output is already live inside EZ LYNK's own ecosystem.</p>
+        <div class="opportunity">→ AI Layer: Driver risk index with fleet manager alert threshold, built on the Drivewyze trust precedent</div>
       </div>
       <div class="gap-severity">
         <span class="severity-label sev-high">High</span>
@@ -598,7 +602,7 @@
       </div>
     </div>
 
-    <div class="gap-card" style="--gap-color: var(--yellow);">
+    <div class="gap-card" style="--gap-color: var(--accent2);">
       <div class="gap-number">04</div>
       <div class="gap-body">
         <h3>Maintenance ROI Is Invisible</h3>
@@ -613,6 +617,19 @@
 
     <div class="gap-card" style="--gap-color: var(--yellow);">
       <div class="gap-number">05</div>
+      <div class="gap-body">
+        <h3>Carbon Neutral Program Is a Disconnected Intelligence Layer</h3>
+        <p>EZ LYNK's carbon neutrality commitment generates emissions data and reduction activity that currently exists as a compliance and marketing output. It is not being cross-referenced against fleet maintenance patterns, route efficiency, or driver behavior data to produce an operational intelligence loop. The carbon layer is sitting on top of the stack rather than integrated into it.</p>
+        <div class="opportunity">→ AI Layer: Carbon-efficiency index per route and vehicle class, integrated with maintenance and driver scoring</div>
+      </div>
+      <div class="gap-severity">
+        <span class="severity-label sev-medium">Medium</span>
+        <span class="hcdg-badge">Layer 2</span>
+      </div>
+    </div>
+
+    <div class="gap-card" style="--gap-color: var(--yellow);">
+      <div class="gap-number">06</div>
       <div class="gap-body">
         <h3>No Governance Layer for AI Decision Drift</h3>
         <p>As EZ LYNK scales toward an AI intelligence layer, there is no framework in place to detect when AI-generated recommendations drift from current fleet conditions, or to define who owns the call when the model's output conflicts with the operator's judgment. Without this, AI adoption stalls at the demo stage.</p>
@@ -660,7 +677,7 @@
         <div class="layer-tag status-gap">Gap</div>
         <div class="layer-desc">
           <strong>Layer 0E · Human-Centered Decision Gate</strong>
-          AI use case not yet validated against the five HCDG tests. Current state: compliance and dashboards pass. Predictive scoring and driver risk indexing are unbuilt but would pass.
+          AI use case not yet validated against the five HCDG tests. Current state: compliance and dashboards pass. Predictive scoring and driver risk indexing are unbuilt but would pass. Drivewyze bypass scoring already demonstrates operator willingness to act on algorithmic output inside this stack.
         </div>
       </div>
 
@@ -676,7 +693,7 @@
         <div class="layer-tag status-gap">Gap</div>
         <div class="layer-desc">
           <strong>Layer 2 · Intelligence Economy Infrastructure</strong>
-          No data moat strategy. EZ LYNK's telematics dataset is a competitive asset that is not currently producing proprietary intelligence at scale. Maintenance ROI scoring and fleet benchmarking could become a defensible product layer.
+          No data moat strategy. EZ LYNK's telematics dataset is a competitive asset that is not currently producing proprietary intelligence at scale. Maintenance ROI scoring, fleet benchmarking, and carbon-efficiency indexing could each become a defensible product layer.
         </div>
       </div>
 
@@ -689,35 +706,35 @@
     <div class="hcdg-grid">
 
       <div class="hcdg-test">
-        <div class="hcdg-icon">🎯</div>
+        <div class="hcdg-icon">Test 01</div>
         <div class="hcdg-name">Decision Impact</div>
         <span class="hcdg-result result-pass">Pass</span>
         <div class="hcdg-note">Direct operational and maintenance decisions improved</div>
       </div>
 
       <div class="hcdg-test">
-        <div class="hcdg-icon">🔄</div>
+        <div class="hcdg-icon">Test 02</div>
         <div class="hcdg-name">Workflow Alignment</div>
         <span class="hcdg-result result-pass">Pass</span>
         <div class="hcdg-note">Fleet managers already use weekly operational cadence</div>
       </div>
 
       <div class="hcdg-test">
-        <div class="hcdg-icon">⚡</div>
+        <div class="hcdg-icon">Test 03</div>
         <div class="hcdg-name">Friction Test</div>
         <span class="hcdg-result result-pass">Pass</span>
         <div class="hcdg-note">Replaces manual signal-reading with a prioritized brief</div>
       </div>
 
       <div class="hcdg-test">
-        <div class="hcdg-icon">🤝</div>
+        <div class="hcdg-icon">Test 04</div>
         <div class="hcdg-name">Trust Test</div>
         <span class="hcdg-result result-conditional">Conditional</span>
-        <div class="hcdg-note">Requires explainable outputs and operator validation period</div>
+        <div class="hcdg-note">Drivewyze bypass scoring already proves operator trust in algorithmic output within this ecosystem. Requires explainable outputs and a defined validation period to extend that trust to new use cases.</div>
       </div>
 
       <div class="hcdg-test">
-        <div class="hcdg-icon">🔍</div>
+        <div class="hcdg-icon">Test 05</div>
         <div class="hcdg-name">Removal Test</div>
         <span class="hcdg-result result-pass">Pass</span>
         <div class="hcdg-note">Workflow becomes measurably worse without predictive layer</div>
